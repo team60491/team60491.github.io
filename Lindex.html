@@ -1,5 +1,12 @@
 <div>Team 60491's Image Recognition Machine </div>
 <button type="button" onclick="init()">Start/Capture Webcam</button>
+<body>
+    <!-- Input element for file selection -->
+    <input type="file" accept="image/*" id="fileInput">
+    <!-- Image element for displaying the preview -->
+    <img id="imagePreview" src="" alt="Image Preview" style="max-width: 300px; margin-top: 20px;">
+   
+</body>
 <div id="webcam-container"></div>
 <div id="label-container"></div>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
@@ -13,6 +20,27 @@
 
     let model, webcam, labelContainer, maxPredictions;
 
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+    const fileInput = event.target;
+    const imagePreview = document.getElementById('imagePreview');
+    
+    // Ensure a file was selected
+    if (fileInput.files && fileInput.files[0]) {
+        // Use the FileReader API to read the selected file
+        const reader = new FileReader();
+        
+        // Callback function that runs when the file is successfully read
+        reader.onload = function(e) {
+            // Set the src attribute of the image tag to the result (data URL)
+            imagePreview.src = e.target.result;
+    
+            
+        };
+        
+        // Read the file as a data URL (Base64 encoded string)
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+});
     // Load the image model and setup the webcam
     async function init() {
         const modelURL = URL + "model.json";
