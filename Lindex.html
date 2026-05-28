@@ -46,7 +46,10 @@
         // Note: the pose library adds "tmImage" object to your window (window.tmImage)
         model = await tmImage.load(modelURL, metadataURL);
         maxPredictions = model.getTotalClasses();
-
+                
+        for (let i = 0; i < maxPredictions; i++) { // and class labels
+                    labelContainer.appendChild(document.createElement("div"));
+                }
                 const prediction = await model.predict(imagePreview);
                 for (let i = 0; i < maxPredictions; i++) {
                     const classPrediction =
