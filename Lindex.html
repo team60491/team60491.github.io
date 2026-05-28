@@ -33,14 +33,26 @@
         reader.onload = function(e) {
             // Set the src attribute of the image tag to the result (data URL)
             imagePreview.src = e.target.result;
-    
+
+            imagePreview.onload = async function() {
+                // predict can take in an image, video or canvas html element
+                    const labelContainer = document.getElementById('label-container');
+
+                const prediction = await model.predict(imagePreview);
+                for (let i = 0; i < maxPredictions; i++) {
+                    const classPrediction =
+                        prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+                    labelContainer.childNodes[i].innerHTML = classPrediction;
+                }
+            };
             
         };
         
         // Read the file as a data URL (Base64 encoded string)
         reader.readAsDataURL(fileInput.files[0]);
     }
-});
+    });
+    
     // Load the image model and setup the webcam
     async function init() {
         const modelURL = URL + "model.json";
